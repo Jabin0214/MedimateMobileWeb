@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Home } from 'lucide-react';
 
 const Result = () => {
   const location = useLocation();
@@ -11,10 +11,22 @@ const Result = () => {
     navigate(`/result/${product.productId}`, { state: { product } });
   };
 
+  const handleHomeClick = () => {
+    navigate('/');
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">Product Results</h1>
-      <div className="overflow-auto h-[calc(100vh-8rem)]">
+      <div className="flex justify-between items-center mb-4">
+        <button
+          onClick={handleHomeClick}
+          className="bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 transition-colors duration-300"
+        >
+          <Home size={24} />
+        </button>
+        <h1 className="text-2xl font-bold text-center flex-grow">Product Results</h1>
+      </div>
+      <div className="overflow-auto h-[calc(100vh-10rem)]">
         {productData.map((product) => (
           <div 
             key={product.productId} 
