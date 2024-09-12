@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Upload, X, Image as ImageIcon } from 'lucide-react';
+import { Upload, X, Image as ImageIcon, ChevronLeft } from 'lucide-react';
 import { APP_API_URL } from '/config.js';
 
 const UploadSearchPage = () => {
@@ -79,7 +79,7 @@ const UploadSearchPage = () => {
         <div className="fixed inset-0 bg-gray-100 flex flex-col">
             <div className="flex justify-between items-center p-4 bg-white shadow">
                 <button onClick={() => navigate('/')} className="text-gray-600">
-                    <X size={24} />
+                    <ChevronLeft size={24} />
                 </button>
                 <h1 className="text-xl font-semibold">Upload Image</h1>
                 <div className="w-6"></div>
@@ -102,16 +102,16 @@ const UploadSearchPage = () => {
                         </button>
                     </div>
                 ) : (
-                    <div className="w-full max-w-md aspect-square mb-4 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center bg-white">
+                    <label className="w-full max-w-md aspect-square mb-4 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center bg-white cursor-pointer">
                         <ImageIcon size={48} className="text-gray-400 mb-2" />
                         <p className="text-gray-500 text-center">Drag and drop an image here or click to select</p>
                         <input
                             type="file"
                             accept="image/*"
                             onChange={handleImageSelect}
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            className="hidden"
                         />
-                    </div>
+                    </label>
                 )}
                 <button
                     onClick={handleUpload}
