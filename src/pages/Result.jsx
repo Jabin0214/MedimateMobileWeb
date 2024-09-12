@@ -6,11 +6,6 @@ const Result = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const productData = location.state?.productData || [];
-
-  useEffect(() => {
-    console.log('ProductResultDisplay mounted');
-    console.log('Received product data:', productData);
-  }, [productData]);
     
   const handleProductClick = (product) => {
     navigate(`/result/${product.productId}`, { state: { product } });

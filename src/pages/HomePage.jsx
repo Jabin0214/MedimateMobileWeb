@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Webcam from 'react-webcam';
 import axios from 'axios';
-import { Camera, Clipboard } from 'lucide-react';
+import { Camera, Clipboard, Repeat } from 'lucide-react';
 import { APP_API_URL } from '/config.js';
 
 const HomePage = () => {
@@ -10,6 +10,7 @@ const HomePage = () => {
     const [capturedImage, setCapturedImage] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [uploadStatus, setUploadStatus] = useState(null);
+    const [facingMode, setFacingMode] = useState('user');
     const webcamRef = useRef(null);
     const navigate = useNavigate();
 
@@ -29,6 +30,10 @@ const HomePage = () => {
         setShowCamera(true);
     };
 
+    const flipCamera = () => {
+        setFacingMode(prevMode => prevMode === 'user' ? 'environment' : 'user');
+    };
+
     const uploadImage = async (imageBlob) => {
         const formData = new FormData();
         formData.append('file', imageBlob, 'image.jpg');
@@ -37,7 +42,6 @@ const HomePage = () => {
             const response = await axios.post(`${APP_API_URL}/message/image`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
-            console.log('Upload successful:', response.data);
             return response.data;
         } catch (error) {
             console.error('Upload error:', error);
@@ -60,11 +64,10 @@ const HomePage = () => {
             const response = await uploadImage(capturedImage);
             setUploadStatus('Upload successful');
 
-            // Add a small delay before navigation to ensure state updates are processed
             setTimeout(() => {
                 navigate('result', {
                     state: { productData: response.data.records },
-                    replace: true // Use replace to avoid issues with back navigation
+                    replace: true
                 });
             }, 100);
         } catch (error) {
@@ -85,12 +88,19 @@ const HomePage = () => {
                             ref={webcamRef}
                             screenshotFormat="image/jpeg"
                             className="rounded-xl w-full h-full object-cover"
+                            videoConstraints={{ facingMode: facingMode }}
                         />
                         <button
                             onClick={handleCapture}
                             className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 font-bold px-4 py-2 rounded-full shadow-md text-sm"
                         >
                             Take Photo
+                        </button>
+                        <button
+                            onClick={flipCamera}
+                            className="absolute top-4 right-4 bg-white text-gray-800 font-bold p-2 rounded-full shadow-md"
+                        >
+                            <Repeat className="w-6 h-6" />
                         </button>
                     </div>
                 ) : capturedImage ? (
@@ -140,9 +150,8 @@ const HomePage = () => {
                     </div>
                 )}
             </div>
-        </  div>
+        </div>
     );
 };
-
 
 export default HomePage;
