@@ -1,9 +1,9 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Webcam from 'react-webcam';
-import axios from 'axios';
 import { Camera, Repeat, X, ChevronLeft, Upload } from 'lucide-react';
 import { APP_API_URL } from '/config.js';
+import { uploadImages} from '../api/service.jsx';
 
 const CameraPage = () => {
     const [facingMode, setFacingMode] = useState('environment');
@@ -23,6 +23,7 @@ const CameraPage = () => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
+
     const handleCapture = useCallback(() => {
         const imageSrc = webcamRef.current.getScreenshot();
         setCapturedImage(imageSrc);
@@ -37,34 +38,13 @@ const CameraPage = () => {
         setFacingMode(prevMode => prevMode === 'user' ? 'environment' : 'user');
     };
 
-    const uploadImage = async (imageDataUrl) => {
-        const formData = new FormData();
-        const blob = await fetch(imageDataUrl).then(r => r.blob());
-        formData.append('file', blob, 'image.jpg');
-
-        try {
-            const response = await axios.post(`${APP_API_URL}/message/image`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            });
-            return response.data;
-        } catch (error) {
-            if (error.response) {
-                throw new Error("No drugs detected, Pplease try again");
-            } else if (error.request) {
-                throw new Error('No response from server, please try again later');
-            } else {
-                throw new Error(`Request setup error: ${error.message}`);
-            }
-        }
-    };
-
     const handleConfirmAndUpload = async () => {
         setUploading(true);
         setUploadStatus(null);
 
         try {
             console.log('Starting image upload...');
-            const response = await uploadImage(capturedImage);
+            const response = await uploadImages(capturedImage);
             setUploadStatus('Upload successful');
 
             // 延迟导航到结果页面

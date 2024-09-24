@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {getUserToken} from "@/utils/index.jsx";
-import {APP_API_URL} from "@/../config.js";
+import {APP_API_URL} from "@/config.js";
 
 const requestProduct = axios.create({
     baseURL: `${APP_API_URL}/products`,
