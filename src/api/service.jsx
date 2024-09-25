@@ -39,3 +39,16 @@ export const uploadImages = async (imageDataUrl) => {
       }
   }
 };
+
+export const searchProducts = async (searchText) => {
+  try {
+      const response = await client.get('/products', {
+          params: {
+              searchText,
+          },
+      });
+      return response.data;
+  } catch (error) {
+      throw error;
+  }
+};
