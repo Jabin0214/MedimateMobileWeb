@@ -44,11 +44,29 @@ const TextResult = () => {
     }, [query]);
 
     useEffect(() => {
-        setResults([]);
-        setPage(1);
-        uniqueIdCounter.current = 0;
-        fetchResults(1);
+        const savedState = JSON.parse(localStorage.getItem('searchState'));
+        if (savedState && savedState.query === query) {
+            setResults(savedState.results);
+            setPage(savedState.page);
+            setHasMore(savedState.hasMore);
+            uniqueIdCounter.current = savedState.uniqueIdCounter;
+        } else {
+            setResults([]);
+            setPage(1);
+            uniqueIdCounter.current = 0;
+            fetchResults(1);
+        }
     }, [query, fetchResults]);
+
+    useEffect(() => {
+        const savedScrollPosition = sessionStorage.getItem('scrollPosition');
+        if (savedScrollPosition) {
+            setTimeout(() => {
+                window.scrollTo(0, parseInt(savedScrollPosition));
+                sessionStorage.removeItem('scrollPosition');
+            }, 100);
+        }
+    }, []);
 
     const loadMore = () => {
         if (!loading && hasMore) {
@@ -57,6 +75,17 @@ const TextResult = () => {
     };
 
     const handleProductClick = (product) => {
+        const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+        sessionStorage.setItem('scrollPosition', scrollPosition.toString());
+        
+        localStorage.setItem('searchState', JSON.stringify({
+            query,
+            results,
+            page,
+            hasMore,
+            uniqueIdCounter: uniqueIdCounter.current
+        }));
+
         navigate(`/result/${product.productId}`, { state: { product } });
     };
 

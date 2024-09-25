@@ -21,7 +21,7 @@ const TextSearchPage = () => {
     return (
         <div className="flex flex-col min-h-screen bg-white">
             {/* Header */}
-            <header className="border-b border-gray-200">
+            <header className="fixed top-0 left-0 right-0 z-10 bg-white border-b border-gray-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
                     <button onClick={() => navigate("/")} className="mr-4 hover:bg-gray-100 rounded-full p-1 transition duration-200">
                         <ArrowLeft className="h-6 w-6 text-gray-600" />
@@ -31,8 +31,7 @@ const TextSearchPage = () => {
             </header>
 
             {/* Main content */}
-            <main className="flex-grow flex flex-col items-center px-4 sm:px-6 lg:px-8 py-8">
-                <div className="w-full max-w-md mb-8">
+            <main className="flex-grow flex flex-col items-center px-4 sm:px-6 lg:px-8 py-8 mt-16">                <div className="w-full max-w-md mb-8">
                     <div className="border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-gray-400 focus-within:border-transparent transition duration-200">
                         <div className="flex">
                             <input
